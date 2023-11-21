@@ -1,13 +1,13 @@
 <?php
     try {
-        $pdo = new PDO("mysql:host=172.26.0.2;dbname=evaluable", "root", "root");
+        $pdo = new PDO("mysql:host=192.168.0.2;dbname=dacoma", "root", "root");
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $query = "SELECT id,nombre FROM user";
+        $query = "SELECT * FROM user";
         $statement = $pdo->prepare($query);
         $statement->execute();
         $text = "";
         while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
-           echo $text = "ID " . $row['id'] . " name: " . $row['nombre'] . "<br>" . $text;
+           echo $text = " name: " . $row['nombre'] ." edad: " . $row['edad'] ." musica: " . $row['musica'] . "<br>" . $text;
         }
         
     } catch (PDOException $e) {
