@@ -1,0 +1,39 @@
+version: '3'
+services:
+    database:
+        build: ./mysql
+        ports: 
+            - 3306:3306
+        #Habililta autenticación con contraseña desde mysql
+        command: --default-authentication-plugin=mysql_native_password 
+        #Variables de entorno
+        environment:
+            MYSQL_DATABASE: "dacoma"
+            MYSQL_PASSWORD: "root"
+            MYSQL_ROOT_PASSWORD: "root"
+        volumes:
+            #sincronización bbdd
+            - ./db/db.sql:/docker-entrypoint-initdb.d/init.sql
+        networks:
+            - default
+    web:
+        build: ./php
+        ports: 
+            - 80:80
+        volumes:
+            - ./public:/var/www/html
+        links:
+            - database
+        #red de conexión de los contenedores
+        networks:
+            - default
+    adminphp:
+        build: ./admin
+        links: 
+            - database
+        ports:
+            - 8000:80
+        environment:
+            MYSQL_USER: "root"
+            MYSQL_PASSWORD: "root"
+            MYSQL_ROOT_PASSWORD: "root"
